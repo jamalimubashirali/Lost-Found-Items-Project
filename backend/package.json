@@ -1,0 +1,27 @@
+{
+  "name": "we_theory_backend",
+  "version": "1.0.0",
+  "description": "This is a group project for WE Theory assigned by Ms. Dua Agha, developed by 21SW071, 21SW026 and 21SW112",
+  "license": "ISC",
+  "author": "Mubashir Ali",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --env-file=.env index.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cloudinary": "^2.6.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.1",
+    "multer": "^1.4.5-lts.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.3"
+  }
+}
