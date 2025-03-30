@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 const matchSchema = new mongoose.Schema(
   {
@@ -21,4 +22,5 @@ const matchSchema = new mongoose.Schema(
   }
 );
 
+matchSchema.plugin(mongooseAggregatePaginate);
 export const Match = mongoose.model("Match", matchSchema);
