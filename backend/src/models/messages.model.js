@@ -19,5 +19,5 @@ const messageSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-chatSchema.plugin(mongooseAggregatePaginate);
+messageSchema.plugin(mongooseAggregatePaginate);
 export const Message = mongoose.model("Message", messageSchema);

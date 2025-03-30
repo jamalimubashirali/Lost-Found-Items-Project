@@ -1,7 +1,7 @@
-import Match from '../models/match.model.js';
+import {Match} from '../models/Matches.model.js';
 import mongoose from 'mongoose';
 import { asyncHandler } from '../utils/asynchandler.js';
-import { Item } from '../models/Items.model';
+import { Item } from '../models/Items.model.js';
 
 const createMatches = asyncHandler(async (req, res) => {
     const lostItem = await Item.findById(req.params.lostItemId);

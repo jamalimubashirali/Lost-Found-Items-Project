@@ -1,7 +1,7 @@
-import asyncHandler from "express-async-handler";
+import { asyncHandler } from "../utils/asynchandler.js";
 import mongoose from "mongoose";
-import { Chat } from "../models/chatModel.js";
-import { Message } from "../models/messageModel.js";
+import { Chat } from "../models/Chat.model.js";
+import { Message } from "../models/messages.model.js";
 
 // 🟢 Start a new chat if it doesn’t exist
 const startChat = asyncHandler(async (req, res) => {

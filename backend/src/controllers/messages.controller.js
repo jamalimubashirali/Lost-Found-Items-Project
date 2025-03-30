@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import { asyncHandler } from "../utils/asynchandler";
+import { asyncHandler } from "../utils/asynchandler.js";
 import { Message } from "../models/messages.model.js";
 
 const createMessage = asyncHandler(async (req, res) => {
@@ -9,7 +8,7 @@ const createMessage = asyncHandler(async (req, res) => {
             message : "Please fill in all fields"
         });
     }
-    const message = await Message.create({
+    await Message.create({
         chatId,
         senderId,
         message : text,
@@ -19,3 +18,5 @@ const createMessage = asyncHandler(async (req, res) => {
         message : "Message sent successfully"
     });
 });
+
+export { createMessage };
