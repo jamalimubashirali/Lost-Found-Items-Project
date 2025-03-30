@@ -6,7 +6,7 @@ const lostItemSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    item: {
+    itemType: {
       type: String,
       enum: ["lost", "found"],
       default: "lost",
@@ -50,4 +50,4 @@ const lostItemSchema = new Schema(
   }
 );
 
-export const LostItem = mongoose.model("LostItem", lostItemSchema);
+export const Item = mongoose.model("Item", lostItemSchema);
