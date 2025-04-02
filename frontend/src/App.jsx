@@ -1,15 +1,13 @@
 import { Button } from "./components/ui/button";
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
 
   return (
     <>
-      <h1 className='bg-amber-600 p-6'>
-        Hello this is tailwind demo
-      </h1>
-      <Button>
-        This is SchadCN Button
-      </Button>
+      <Login />
+      <Register />
     </>
   )
 }
