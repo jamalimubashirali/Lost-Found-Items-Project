@@ -10,6 +10,7 @@
     "dev": "nodemon --env-file=.env index.js"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.1",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.6.0",
     "cookie-parser": "^1.4.7",
@@ -20,7 +21,8 @@
     "mongoose": "^8.13.1",
     "mongoose-aggregate-paginate-v2": "^1.1.4",
     "multer": "^1.4.5-lts.2",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "tailwindcss": "^4.1.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9",
