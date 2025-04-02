@@ -20,7 +20,7 @@ const register = asyncHandler(async (req, res) => {
             message: "User already exists",
         });
     }
-    const user = (await User.create({ username, name, email, password })).select("-password");
+    const user = await User.create({ username, name, email, password }).select("-password");
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "30d",
     });
@@ -49,14 +49,13 @@ const login = asyncHandler(async (req, res) => {
             message : "Invalid credentials"
         });
     }
-
     const isMatch = await user.isPasswordCorrect(password);
     if(!isMatch) {
         return res.status(400).json({
             message : "Invalid credentials"
         });
     }
-    const token = jwt.sign({id : user._id} , process.env.JWT_SECRET , {
+    const token = jwt.sign({id : user._id} , process.env.JWT_SECRET_KEY , {
         expiresIn : "30d"
     });
 
@@ -89,6 +88,22 @@ const getUser = asyncHandler(async (req, res) => {
     });
 });
 
+const getUserById = asyncHandler(async (req , res) => {
+    const {id} = req.params;
+
+    const user = await User.findById(id);
+
+    if(!user) {
+        return res.status(404).json({
+            message : "User not Found"
+        });
+    }
+
+    return res.status(200).json({
+        user
+    });
+});
+
 const updateUser = asyncHandler(async (req, res) => {
     const updatedUserData = req.body;
     if(!updatedUserData){
@@ -113,4 +128,4 @@ const getAllUsers = asyncHandler(async (_, res) => {
     });
 });
 
-export { register, login, logout , getUser , updateUser , getAllUsers };
+export { register, login, logout , getUser , updateUser , getAllUsers , getUserById };

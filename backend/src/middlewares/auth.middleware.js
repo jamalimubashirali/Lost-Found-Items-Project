@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { asyncHandler } from "../utils/asynchandler.js";
+import { User } from "../models/User.model.js";
 
 const authMiddleware = asyncHandler( async (req , res , next) => {
     try {
@@ -13,7 +14,9 @@ const authMiddleware = asyncHandler( async (req , res , next) => {
         
         const decoded =  jwt.verify(token , process.env.JWT_SECRET_KEY);
 
-        const user = undefined; // Implement Database Check
+        const user = await User.findById({
+            _id : decoded.id
+        }); // Implement Database Check
         
         if(!user) {
             return res.status(400).json({
