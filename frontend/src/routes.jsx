@@ -46,7 +46,7 @@ const router = createBrowserRouter([
           },
           {
             path: ':itemId',
-            element: <AuthLayout>
+            element: <AuthLayout authentication={false}>
               <ItemDetailsPage />
             </AuthLayout>
           }
