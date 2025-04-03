@@ -13,6 +13,10 @@ import { HowItWorks } from "./Landing/HowItWorks";
 import { StatsSection } from "./Landing/StatsSection";
 import  Login  from "./Login/Login";
 import Register from "./Registration/Register";
+import { CommunitySpotlight } from "./Home/CommunitySpotlight";
+import { TrendingItems } from "./Home/TrendingItems";
+import { QuickActions } from "./Home/QuickActions";
+import { PersonalizedRecommendations } from "./Home/PersonalizedRecommendation";
 
 export {
     CategoryFilter,
@@ -29,5 +33,9 @@ export {
     HowItWorks,
     StatsSection,
     Login,
-    Register
+    Register,
+    CommunitySpotlight,
+    TrendingItems,
+    QuickActions,
+    PersonalizedRecommendations,
 }
