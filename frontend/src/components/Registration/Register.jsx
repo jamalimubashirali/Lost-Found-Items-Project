@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -10,16 +9,19 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import Container from "./Container";
+import Container from "../utils/Container";
 
 const onSubmit = (data) => {
   console.log(data);
 };
 
-const Login = () => {
+const Register = () => {
   const form = useForm({
     defaultValues: {
       username: "",
+      name : "",
+      email : "",
+      password : ""
     },
   });
 
@@ -28,6 +30,26 @@ const Login = () => {
       <Container>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <FormField
+              control={form.control}
+              name="name"
+              rules={{
+                required: "Name is required",
+                minLength: {
+                  value: 3,
+                  message: "Name must be at least 3 characters",
+                },
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="John Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="username"
@@ -44,9 +66,25 @@ const Login = () => {
                   <FormControl>
                     <Input placeholder="shadcn" {...field} />
                   </FormControl>
-                  {form.errors && (
-                    <FormDescription>{form.errors.message}</FormDescription>
-                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              rules={{
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: "Invalid email address",
+                },
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input placeholder="Email" {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -79,4 +117,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
