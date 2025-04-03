@@ -9,16 +9,17 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useState } from 'react';
 import Container from './Container';
+import { useSelector } from 'react-redux';
 
 export function Navbar() {
-  const [isLoggedIn] = useState(true) // Replace with auth state
+  const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
 
   return (
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
           <Container className={"w-full overflow-x-hidden"}>
       <div className="flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center font-bold">
-          <span className="text-primary">Lost</span>&Found
+          CampusFound
         </Link>
         
         <nav className="flex items-center gap-6">
@@ -44,14 +45,18 @@ export function Navbar() {
               </DropdownMenu>
             </>
           ) : (
-            <Button asChild>
+            <div className='space-x-3'>
+              <Button asChild>
               <Link to="/login">Login</Link>
             </Button>
+            <Button variant="outline" asChild>
+              <Link to="/register">Sign Up</Link>
+            </Button>
+            </div>
           )}
         </nav>
       </div>
       </Container>
     </header>
-
   )
 }

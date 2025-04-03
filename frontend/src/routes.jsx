@@ -1,12 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import HomePage from './pages/HomePage';
+import LandingPage from './pages/LandingPage';
 import GalleryPage from './pages/GalleryPage';
 import ReportFormPage from './pages/ReportFormPage';
 import ItemDetailsPage from './pages/ItemDetailsPage';
 import DashboardPage from './pages/DashboardPage';
 import AdminPanelPage from './pages/AdminPanelPage';
 import AuthLayout from './components/AuthLayout';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const router = createBrowserRouter([
@@ -16,18 +19,36 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />
+        element: <LandingPage />
+      },
+      {
+        path : "login",
+        element : <LoginPage />
+      },
+      {
+        path : "register",
+        element : <SignupPage />
+      },
+      {
+        path : 'home',
+        element : <AuthLayout>
+          <HomePage />
+        </AuthLayout>
       },
       {
         path: 'items',
         children: [
           {
             index: true,
-            element: <GalleryPage />,
+            element: <AuthLayout>
+              <GalleryPage />
+            </AuthLayout>,
           },
           {
             path: ':itemId',
-            element: <ItemDetailsPage />
+            element: <AuthLayout>
+              <ItemDetailsPage />
+            </AuthLayout>
           }
         ]
       },
