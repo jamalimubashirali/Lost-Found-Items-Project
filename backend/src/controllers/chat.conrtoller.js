@@ -59,20 +59,30 @@ const getChatMessages = asyncHandler(async (req, res) => {
     res.status(200).json({ success: true, messages });
 });
 
-// 🟢 Send a message
-const sendMessage = asyncHandler(async (req, res) => {
-    const { chatId, message } = req.body;
+const deleteChat = asyncHandler(async (req, res) => {
+    const { chatId } = req.params;
 
-    // Create a new message
-    const newMessage = new Message({
-        chatId,
-        senderId: req.user._id,
-        message
-    });
+    // Check if the chat exists
+    const chat = await Chat.findById(chatId);
+    if (!chat) {
+        return res.status(404).json({ success: false, message: "Chat not found" });
+    }
 
-    await newMessage.save();
+    await Message.deleteMany({ chatId }); // Delete all messages in the chat
 
-    res.status(200).json({ success: true, message: newMessage });
+    // Delete the chat
+    await Chat.findByIdAndDelete(chatId);
+
+    res.status(200).json({ success: true, message: "Chat deleted successfully" });
 });
 
-export { startChat, getChatMessages, sendMessage };
+const getUserChats = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+    // Find all chats where the user is a participant
+    const chats = await Chat.find({ participants: userId });
+
+    res.status(200).json({ success: true, chats });
+});
+
+export { startChat, getChatMessages , getUserChats, deleteChat };

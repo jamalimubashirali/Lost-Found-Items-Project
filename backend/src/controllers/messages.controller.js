@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asynchandler.js";
 import { Message } from "../models/messages.model.js";
 
 const createMessage = asyncHandler(async (req, res) => {
-    const { chatId, senderId, text } = req.body;
+    const { chatId, text } = req.body;
     if(!chatId || !senderId || !text) {
         return res.status(400).json({
             message : "Please fill in all fields"
@@ -10,7 +10,7 @@ const createMessage = asyncHandler(async (req, res) => {
     }
     await Message.create({
         chatId,
-        senderId,
+        senderId : req.user._id,
         message : text,
     });
 
@@ -19,4 +19,25 @@ const createMessage = asyncHandler(async (req, res) => {
     });
 });
 
-export { createMessage };
+const deleteMessage = asyncHandler(async (req, res) => {
+    const { messageId } = req.params;
+    if(!messageId) {
+        return res.status(400).json({
+            message : "Please fill in all fields"
+        });
+    }
+    const deletedMessage = await Message.findByIdAndDelete(messageId);
+
+    if(!deletedMessage) {
+        return res.status(404).json({
+            message : "Message not found"
+        });
+    }
+
+    return res.status(200).json({
+        message : "Message deleted successfully"
+    });
+});
+
+
+export { createMessage , deleteMessage };

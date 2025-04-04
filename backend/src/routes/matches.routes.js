@@ -4,8 +4,8 @@ import { authMiddleware } from '../middlewares/auth.middleware.js';
 
 const matchesRouter = express.Router();
 
-matchesRouter.post('/:lostItemId', authMiddleware, createMatches);
-matchesRouter.get('/:lostItemId', authMiddleware, getMatches);
-matchesRouter.put('/:id', authMiddleware, updateMatchStatus);
+matchesRouter.post('/create-match/:itemId', createMatches);
+matchesRouter.get('/get-match/:itemId', getMatches);
+matchesRouter.patch('/update-match/:id', updateMatchStatus);
 
 export { matchesRouter };
