@@ -24,8 +24,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { CalendarIcon, UploadCloud } from 'lucide-react'
 import { format } from 'date-fns'
 import { cn } from '@/lib/utils'
-import { ImageUpload } from '@/components/ImageUpload'
+import { ImageUpload } from '@/components/utils/ImageUpload'
 import { useNavigate } from 'react-router-dom'
+import { Container } from '@/components'
 
 // Form validation schema
 const formSchema = z.object({
@@ -72,7 +73,8 @@ export function RegisterItemPage() {
   }
 
   return (
-    <div className="container py-8 max-w-3xl">
+    <div className="py-8">
+      <Container>
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold">Report {form.watch('itemType') === 'found' ? 'Found' : 'Lost'} Item</h1>
         <p className="text-muted-foreground">
@@ -83,6 +85,8 @@ export function RegisterItemPage() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           {/* Item Type Selection */}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
             control={form.control}
             name="itemType"
@@ -104,8 +108,6 @@ export function RegisterItemPage() {
               </FormItem>
             )}
           />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Category */}
             <FormField
               control={form.control}
@@ -150,10 +152,20 @@ export function RegisterItemPage() {
                 </FormItem>
               )}
             />
-          </div>
-
-          {/* Description */}
-          <FormField
+             <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Location*</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Where was it lost/found?" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -170,24 +182,46 @@ export function RegisterItemPage() {
               </FormItem>
             )}
           />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Location */}
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Location*</FormLabel>
+          <FormField
+            control={form.control}
+            name="additionalInfo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Additional Information</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Any other details that might help identify the item..."
+                    className="min-h-[120px]"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className='space-y-6'>
+          <FormField
+            control={form.control}
+            name="contactPreference"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Preferred Contact Method*</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <Input placeholder="Where was it lost/found?" {...field} />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select contact method" />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Date */}
+                  <SelectContent>
+                    <SelectItem value="chat">In-app Chat</SelectItem>
+                    <SelectItem value="email">Email</SelectItem>
+                    <SelectItem value="phone">Phone Call</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
             <FormField
               control={form.control}
               name="date"
@@ -200,7 +234,7 @@ export function RegisterItemPage() {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "pl-3 text-left font-normal",
+                            "text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -230,8 +264,6 @@ export function RegisterItemPage() {
               )}
             />
           </div>
-
-          {/* Image Upload */}
           <FormField
             control={form.control}
             name="image"
@@ -250,68 +282,8 @@ export function RegisterItemPage() {
               </FormItem>
             )}
           />
-
-          {/* Reward (conditional) */}
-          {form.watch('itemType') === 'lost' && (
-            <FormField
-              control={form.control}
-              name="reward"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Reward Offered</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Optional" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          )}
-
-          {/* Contact Preference */}
-          <FormField
-            control={form.control}
-            name="contactPreference"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Preferred Contact Method*</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select contact method" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="chat">In-app Chat</SelectItem>
-                    <SelectItem value="email">Email</SelectItem>
-                    <SelectItem value="phone">Phone Call</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Additional Info */}
-          <FormField
-            control={form.control}
-            name="additionalInfo"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Additional Information</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Any other details that might help identify the item..."
-                    className="min-h-[100px]"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="flex justify-end gap-4">
+          </div>
+          <div className="flex justify-center gap-4 lg:justify-end sm:justify-center">
             <Button
               type="button"
               variant="outline"
@@ -326,6 +298,7 @@ export function RegisterItemPage() {
           </div>
         </form>
       </Form>
+      </Container>
     </div>
   )
 }

@@ -1,13 +1,13 @@
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-export function ProfileTabs({ activeTab, setActiveTab }) {
+export function ProfileTabs({ activeTab, onTabChange }) {
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab}>
+    <Tabs value={activeTab} onValueChange={onTabChange}>
       <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="reports">My Reports</TabsTrigger>
-        <TabsTrigger value="account">Account</TabsTrigger>
-        <TabsTrigger value="notifications">Notifications</TabsTrigger>
+        <TabsTrigger value="lost">Lost Items</TabsTrigger>
+        <TabsTrigger value="found">Found Items</TabsTrigger>
+        <TabsTrigger value="reunited">Reunited</TabsTrigger>
       </TabsList>
     </Tabs>
-  )
+  );
 }

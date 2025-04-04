@@ -7,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useState } from 'react';
 import Container from './Container';
 import { useSelector } from 'react-redux';
 
@@ -15,7 +14,7 @@ export function Navbar() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
 
   return (
-        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+        <header className="sticky top-0 z-50 w-full border-b backdrop-blur-sm">
           <Container className={"w-full overflow-x-hidden"}>
       <div className="flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center font-bold">

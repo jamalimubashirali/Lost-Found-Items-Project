@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import LandingPage from './pages/LandingPage';
+import ProfilePage from './pages/ProfilePage';
+import RegisterItemPage from './pages/RegisterItemPage';
 import GalleryPage from './pages/GalleryPage';
 import ReportFormPage from './pages/ReportFormPage';
 import ItemDetailsPage from './pages/ItemDetailsPage';
@@ -36,11 +38,17 @@ const router = createBrowserRouter([
         </AuthLayout>
       },
       {
+        path:'profile/:id',
+        element : <AuthLayout authentication={false}>
+          <ProfilePage />
+        </AuthLayout>
+      },
+      {
         path: 'items',
         children: [
           {
             index: true,
-            element: <AuthLayout>
+            element: <AuthLayout authentication={false}>
               <GalleryPage />
             </AuthLayout>,
           },
@@ -49,6 +57,12 @@ const router = createBrowserRouter([
             element: <AuthLayout authentication={false}>
               <ItemDetailsPage />
             </AuthLayout>
+          },
+          {
+            path: 'register-item',
+            element: <AuthLayout authentication={false}>
+              <RegisterItemPage />
+              </AuthLayout>
           }
         ]
       },
