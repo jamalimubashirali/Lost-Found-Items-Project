@@ -7,8 +7,8 @@ const userRouter = express.Router();
 userRouter.post('/register', register);
 userRouter.post('/login', login);
 userRouter.post('/logout', authMiddleware, logout);
-userRouter.get('/', authMiddleware, getUser);
-userRouter.get('/all-users', getAllUsers);
+userRouter.get('/me', authMiddleware, getUser);
+userRouter.get('/all-users', authMiddleware, getAllUsers);
 userRouter.get('/:id' , authMiddleware , getUserById);
 userRouter.put('/update/:id', authMiddleware, updateUser);
 
