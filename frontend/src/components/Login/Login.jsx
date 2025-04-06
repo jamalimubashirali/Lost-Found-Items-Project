@@ -16,9 +16,9 @@ import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { login } from "@/store/auth.slice";
+import { login , logout } from "@/store/auth.slice";
 import { useNavigate } from "react-router-dom";
-import { Container } from "@/components";
+import authService from "@/services/auth.services";
 
 
 // Define validation schema with Zod
@@ -32,6 +32,8 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
@@ -45,13 +47,13 @@ const Login = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log("Login data:", data);
-      // Here you would typically:
-      // 1. Call your authentication API
-      // 2. Handle the response
-      // 3. Redirect on success or show error
+      const login = await authService.login(data.email , data.password);
+      if(login) {
+          dispatch(login());
+          navigate('/home');
+      } else {
+        dispatch(logout());
+      }
     } catch (error) {
       console.error("Login error:", error);
       form.setError("root", {

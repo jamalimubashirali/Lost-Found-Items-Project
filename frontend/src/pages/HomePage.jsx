@@ -9,7 +9,7 @@ function Homepage() {
   const [activeTab, setActiveTab] = useState('forYou'); // 'forYou', 'trending', 'recent'
 
   return (
-    <div className="homepage-container">
+    <div className="homepage-container min-h-screen">
       {/* Hero Welcome Section */}
       <section className="welcome-banner bg-gradient-to-r from-primary/10 to-secondary/10 p-8 rounded-xl mb-8">
         <Container>

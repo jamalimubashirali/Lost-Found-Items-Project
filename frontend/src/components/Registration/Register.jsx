@@ -13,15 +13,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import authService from "@/services/auth.services";
+import { useDispatch } from "react-redux";
+import { login , logout } from "@/store/auth.slice";
 
 // Define validation schema with Zod
 const formSchema = z.object({
   username: z.string().min(3, {
     message: "Username must be at least 3 characters.",
   }),
+  name: z.string(),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
@@ -42,6 +46,8 @@ const formSchema = z.object({
 });
 
 const Register = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
@@ -49,6 +55,7 @@ const Register = () => {
     defaultValues: {
       username: "",
       email: "",
+      name: "",
       password: "",
       confirmPassword: "",
     },
@@ -57,13 +64,14 @@ const Register = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log("Registration data:", data);
-      // Here you would typically:
-      // 1. Call your registration API
-      // 2. Handle the response
-      // 3. Redirect on success or show error
+      const registerData = await authService.register(data.username , data.name, data.email , data.password);
+      if(registerData){
+        dispatch(login());
+        // Set userData in using redux
+        navigate("/home")
+      } else {
+        dispatch(logout());
+      }
     } catch (error) {
       console.error("Registration error:", error);
       form.setError("root", {
@@ -94,7 +102,25 @@ const Register = () => {
                     {form.formState.errors.root.message}
                   </div>
                 )}
-                
+
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="full name"
+                          autoComplete="name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <FormField
                   control={form.control}
                   name="username"
@@ -112,7 +138,7 @@ const Register = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="email"
@@ -131,7 +157,7 @@ const Register = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="password"
@@ -153,7 +179,7 @@ const Register = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <FormField
                   control={form.control}
                   name="confirmPassword"
@@ -172,7 +198,7 @@ const Register = () => {
                     </FormItem>
                   )}
                 />
-                
+
                 <div className="flex items-center">
                   <input
                     id="terms"
@@ -188,7 +214,7 @@ const Register = () => {
                     I agree to the <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
                   </label>
                 </div>
-                
+
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
                     <>
@@ -201,7 +227,7 @@ const Register = () => {
                 </Button>
               </form>
             </Form>
-            
+
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
@@ -213,7 +239,7 @@ const Register = () => {
                   </span>
                 </div>
               </div>
-              
+
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <Button variant="outline">
                   <svg
@@ -230,7 +256,7 @@ const Register = () => {
                   </svg>
                   <span className="ml-2">GitHub</span>
                 </Button>
-                
+
                 <Button variant="outline">
                   <svg
                     className="h-5 w-5"
@@ -248,7 +274,7 @@ const Register = () => {
                 </Button>
               </div>
             </div>
-            
+
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
               <Link

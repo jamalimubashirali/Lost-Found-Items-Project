@@ -7,7 +7,7 @@ const app = express();
 
 // Required Middlewares
 app.use(cors({
-    origin: process.env.FRONTEND_ORIGIN,
+    origin: process.env.FONTEND_ORIGIN,
     credentials: true
 }));
 app.use(express.json({

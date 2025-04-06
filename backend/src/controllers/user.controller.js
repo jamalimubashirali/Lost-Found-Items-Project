@@ -20,8 +20,8 @@ const register = asyncHandler(async (req, res) => {
             message: "User already exists",
         });
     }
-    const user = await User.create({ username, name, email, password }).select("-password");
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    const user = await User.create({ username, name, email, password });
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
         expiresIn: "30d",
     });
     res.cookie("token", token, {
@@ -30,7 +30,7 @@ const register = asyncHandler(async (req, res) => {
     });
     
     return res.status(201).json({
-        user,
+        message : "User Registered Successfully"
     });
 });
 
