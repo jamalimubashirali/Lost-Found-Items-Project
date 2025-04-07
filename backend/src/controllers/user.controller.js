@@ -35,9 +35,9 @@ const register = asyncHandler(async (req, res) => {
 });
 
 const login = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
     // checking if email and password are provided
-    if(!email || !password) {
+    if(!(email || username) || !password) {
         return res.status(400).json({
             message : "Please fill in all fields"
         });

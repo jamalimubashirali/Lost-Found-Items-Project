@@ -47,8 +47,8 @@ const Login = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const login = await authService.login(data.email , data.password);
-      if(login) {
+      const loginData = await authService.login(data.username , data.password);
+      if(loginData) {
           dispatch(login());
           navigate('/home');
       } else {
