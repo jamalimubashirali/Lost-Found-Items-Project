@@ -4,9 +4,12 @@ import { RecentActivity } from '@/components/Home/RecentActivity';
 import { QuickActions } from '@/components/Home/QuickActions';
 import { CommunitySpotlight } from '@/components/Home/CommunitySpotlight';
 import { Container, PersonalizedRecommendations } from '@/components';
+import { useSelector } from 'react-redux';
 
 function Homepage() {
   const [activeTab, setActiveTab] = useState('forYou'); // 'forYou', 'trending', 'recent'
+  const userData = useSelector((state) => state.user.userData) || 'User';
+  console.log(userData);
 
   return (
     <div className="homepage-container min-h-screen">
@@ -15,7 +18,9 @@ function Homepage() {
         <Container>
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome back, User!</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              {`Welcome back, ${userData?.name}!`}
+            </h1>
             <p className="text-muted-foreground xs:text-center sm:text-center">What would you like to do today?</p>
           </div>
           <QuickActions />

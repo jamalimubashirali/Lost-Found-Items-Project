@@ -17,6 +17,7 @@ import authService from '@/services/auth.services';
 
 export function Navbar() {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
+  const userData = useSelector((state) => state.user.userData);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -46,17 +47,22 @@ export function Navbar() {
           {isLoggedIn ? (
             <>
               <Button variant="ghost" asChild>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/home">Home</Link>
+              </Button>
+              <Button variant="ghost" asChild>
+                <Link to="/items">Items</Link>
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger>
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/avatars/01.png" />
-                    <AvatarFallback>U</AvatarFallback>
+                    <AvatarFallback>
+                      {`${userData.name.split(" ")[0][0]}`}
+                    </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <Link to={"/profile"}>
+                  <Link to={`/profile/${userData._id}`}>
                   <DropdownMenuItem>Profile</DropdownMenuItem>
                   </Link>
                   {/* <DropdownMenuItem>My Reports</DropdownMenuItem> */}

@@ -19,6 +19,7 @@ import { useDispatch } from "react-redux";
 import { login , logout } from "@/store/auth.slice";
 import { useNavigate } from "react-router-dom";
 import authService from "@/services/auth.services";
+import { setUser } from "@/store/user.slice";
 
 
 // Define validation schema with Zod
@@ -50,6 +51,7 @@ const Login = () => {
       const loginData = await authService.login(data.username , data.password);
       if(loginData) {
           dispatch(login());
+          dispatch(setUser(loginData.user));
           navigate('/home');
       } else {
         dispatch(logout());

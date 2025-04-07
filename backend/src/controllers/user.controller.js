@@ -20,7 +20,12 @@ const register = asyncHandler(async (req, res) => {
             message: "User already exists",
         });
     }
-    const user = await User.create({ username, name, email, password });
+    const user = await User.create({
+        username : username,
+        name : name,
+        email : email,
+        password : password,
+     });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
         expiresIn: "30d",
     });
@@ -30,6 +35,12 @@ const register = asyncHandler(async (req, res) => {
     });
     
     return res.status(201).json({
+        user : {
+            _id : user._id,
+            username : user.username,
+            name : user.name,
+            email : user.email,
+        },
         message : "User Registered Successfully"
     });
 });
@@ -65,7 +76,13 @@ const login = asyncHandler(async (req, res) => {
     });
 
     return res.status(200).json({
-        user
+        user : {
+            _id : user._id,
+            username : user.username,
+            name : user.name,
+            email : user.email,
+        },
+        message : "User Registered Successfully"
     });
 });
 

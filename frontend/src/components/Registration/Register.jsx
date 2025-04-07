@@ -6,44 +6,54 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import authService from "@/services/auth.services";
 import { useDispatch } from "react-redux";
-import { login , logout } from "@/store/auth.slice";
+import { login, logout } from "@/store/auth.slice";
+import { setUser } from "@/store/user.slice";
 
 // Define validation schema with Zod
-const formSchema = z.object({
-  username: z.string().min(3, {
-    message: "Username must be at least 3 characters.",
-  }),
-  name: z.string(),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string()
-    .min(8, {
-      message: "Password must be at least 8 characters.",
-    })
-    .regex(/[A-Z]/, {
-      message: "Password must contain at least one uppercase letter.",
-    })
-    .regex(/[0-9]/, {
-      message: "Password must contain at least one number.",
+const formSchema = z
+  .object({
+    username: z.string().min(3, {
+      message: "Username must be at least 3 characters.",
     }),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+    name: z.string(),
+    email: z.string().email({
+      message: "Please enter a valid email address.",
+    }),
+    password: z
+      .string()
+      .min(8, {
+        message: "Password must be at least 8 characters.",
+      })
+      .regex(/[A-Z]/, {
+        message: "Password must contain at least one uppercase letter.",
+      })
+      .regex(/[0-9]/, {
+        message: "Password must contain at least one number.",
+      }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 const Register = () => {
   const navigate = useNavigate();
@@ -64,11 +74,13 @@ const Register = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const registerData = await authService.register(data.username , data.name, data.email , data.password);
-      if(registerData){
+      const registerData = await authService.register(
+        data
+      );
+      if (registerData) {
         dispatch(login());
-        // Set userData in using redux
-        navigate("/home")
+        dispatch(setUser(registerData.user));
+        navigate("/home");
       } else {
         dispatch(logout());
       }
@@ -96,7 +108,10 @@ const Register = () => {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
                 {form.formState.errors.root && (
                   <div className="text-sm font-medium text-destructive">
                     {form.formState.errors.root.message}
@@ -173,7 +188,8 @@ const Register = () => {
                         />
                       </FormControl>
                       <FormDescription className="text-xs">
-                        Must be at least 8 characters with 1 uppercase letter and 1 number
+                        Must be at least 8 characters with 1 uppercase letter
+                        and 1 number
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -211,7 +227,17 @@ const Register = () => {
                     htmlFor="terms"
                     className="ml-2 block text-sm text-gray-900"
                   >
-                    I agree to the <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link> and <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
+                    I agree to the{" "}
+                    <Link to="/terms" className="text-primary hover:underline">
+                      Terms of Service
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      to="/privacy"
+                      className="text-primary hover:underline"
+                    >
+                      Privacy Policy
+                    </Link>
                   </label>
                 </div>
 
