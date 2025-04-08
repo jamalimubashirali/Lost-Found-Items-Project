@@ -100,28 +100,82 @@ const deleteItem = asyncHandler(async (req, res) => {
 });
 
 const searchItems = asyncHandler(async (req, res) => {
-  const { itemName, description, category, location } = req.query;
+  const { 
+      query,
+      itemName, 
+      description, 
+      category, 
+      location,
+      itemType,
+      dateRange,
+      page = 1,
+      limit = 10
+  } = req.query;
 
-  // Search for items based on itemName, description, category, location
-  const items = await Item.find({
-    $or: [
-      { itemName: { $regex: itemName ? itemName : "", $options: "i" } },
-      {
-        description: { $regex: description ? description : "", $options: "i" },
-      },
-      { category: { $regex: category ? category : "", $options: "i" } },
-      { location: { $regex: location ? location : "", $options: "i" } },
-    ],
-  });
+  // Build search conditions
+  const conditions = [];
+  
+  // General search across multiple fields
+  if (query) {
+      conditions.push(
+          { itemName: { $regex: query, $options: "i" } },
+          { description: { $regex: query, $options: "i" } },
+          { category: { $regex: query, $options: "i" } },
+          { location: { $regex: query, $options: "i" } }
+      );
+  }
+  
+  // Specific field searches
+  if (itemName) conditions.push({ itemName: { $regex: itemName, $options: "i" } });
+  if (description) conditions.push({ description: { $regex: description, $options: "i" } });
+  if (category) conditions.push({ category: { $regex: category, $options: "i" } });
+  if (location) conditions.push({ location: { $regex: location, $options: "i" } });
+  if (itemType) conditions.push({ itemType });
 
-  return res.status(200).json({
-    items,
-  });
+  // Date range filtering
+  if (dateRange) {
+      const days = parseInt(dateRange);
+      if (!isNaN(days)) {
+          const dateFilter = new Date();
+          dateFilter.setDate(dateFilter.getDate() - days);
+          conditions.push({ createdAt: { $gte: dateFilter } });
+      }
+  }
+
+  // Build final query
+  const searchQuery = conditions.length > 0 ? { $or: conditions } : {};
+  
+  try {
+      // Get total count for pagination
+      const total = await Item.countDocuments(searchQuery);
+      
+      // Execute search with pagination
+      const items = await Item.find(searchQuery)
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * limit)
+          .limit(parseInt(limit))
+          .populate('userId', 'name avatar'); // Include user info
+
+      return res.status(200).json({
+          success: true,
+          count: items.length,
+          total,
+          page: parseInt(page),
+          pages: Math.ceil(total / limit),
+          items
+      });
+  } catch (error) {
+      console.error("Search error:", error);
+      return res.status(500).json({
+          success: false,
+          message: "Error performing search"
+      });
+  }
 });
 
-const getLostItem = asyncHandler(async (req, res) => {
+const getItemById = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const item = await Item.findById(id);
+  const item = await Item.findById(id).populate("userId", "name email usename createdAt");
 
   if (!item) {
     return res.status(404).json({
@@ -160,13 +214,21 @@ const updateItemStatus = asyncHandler(async (req, res) => {
   });
 });
 
+const getAllItems = asyncHandler(async (req, res) => {
+  const items = await Item.find();
+  return res.status(200).json({
+    items,
+  });
+}); 
+
 export {
   createItem,
   getAllLostItems,
-  getLostItem,
+  getItemById,
   updateItemStatus,
   getAllFoundItems,
   updateItemDetails,
   deleteItem,
   searchItems,
+  getAllItems,
 };

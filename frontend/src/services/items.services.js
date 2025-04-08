@@ -48,10 +48,20 @@ class ItemsService {
         }
     }
 
-    async searchItems(query) {
+    async searchItems(searchParams) {
         try {
             const response = await axios.get(`${this.baseUrl}/items/search`, {
-                params: { query },
+                params: {
+                    query: searchParams.query,       // General search term
+                    itemName: searchParams.itemName, // Specific field searches
+                    description: searchParams.description,
+                    category: searchParams.category,
+                    location: searchParams.location,
+                    itemType: searchParams.itemType, // 'lost' or 'found'
+                    dateRange: searchParams.dateRange, // e.g. '7days', '30days'
+                    page: searchParams.page,         // For pagination
+                    limit: searchParams.limit        // Items per page
+                },
                 withCredentials: true,
             });
             return response.data;
@@ -61,12 +71,12 @@ class ItemsService {
         }
     }
 
-    async getLostItem(id) {
+    async getItem(id) {
         try {
-            const response = await axios.get(`${this.baseUrl}/items/lost-item/${id}`, { withCredentials: true });
+            const response = await axios.get(`${this.baseUrl}/items/${id}`, { withCredentials: true });
             return response.data;
         } catch (error) {
-            console.error("Error fetching lost item:", error);
+            console.error("Error fetching item:", error);
             throw error;
         }
     }
@@ -108,6 +118,16 @@ class ItemsService {
             return response.data;
         } catch (error) {
             console.error("Error deleting item:", error);
+            throw error;
+        }
+    }
+
+    async getAllItems() {
+        try {
+            const response = await axios.get(`${this.baseUrl}/items/all`, { withCredentials: true });
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching all items:", error);
             throw error;
         }
     }

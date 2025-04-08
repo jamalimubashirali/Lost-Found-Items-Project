@@ -1,38 +1,86 @@
 import { ItemCard } from '@/components/Items/ItemCard';
+import { useEffect, useState } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import itemsService from '@/services/items.services';
 
 export function SimilarItems({ category, currentItemId }) {
-  // In a real app, this would come from an API call
-  const similarItems = [
-    {
-      id: "2",
-      title: "Brown Leather Wallet",
-      category: "Wallet",
-      location: "Student Center",
-      time: "2 days ago",
-      image: "/wallet-2.jpg",
-      status: "found"
-    },
-    {
-      id: "3",
-      title: "Black Card Holder",
-      category: "Wallet",
-      location: "Library",
-      time: "1 week ago",
-      image: "/cardholder.jpg",
-      status: "lost"
+  const [similarItems, setSimilarItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isEmpty, setIsEmpty] = useState(false);
+
+  useEffect(() => {
+    const fetchSimilarItems = async () => {
+      setIsLoading(true);
+      setError(null);
+      setIsEmpty(false);
+      
+      try {
+        const response = await itemsService.searchItems({
+          category
+        });
+
+        const similarItems = response.items.filter(item => item._id !== currentItemId);
+
+        if (similarItems.length === 0) {
+          setIsEmpty(true);
+        } else {
+          setSimilarItems(response.items);
+        }
+      } catch (error) {
+        console.error('Error fetching similar items:', error);
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (category) { // Only fetch if category exists
+      fetchSimilarItems();
+    } else {
+      setIsLoading(false);
+      setIsEmpty(true);
     }
-  ];
+  }, [category, currentItemId]);
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">Similar Items</h2>
+        <div className="grid grid-cols-1 gap-4">
+          {[...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-32 w-full rounded-lg" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">Similar Items</h2>
+        <p className="text-red-500">Error loading similar items: {error}</p>
+      </div>
+    );
+  }
+
+  if (isEmpty) {
+    return (
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">Similar Items</h2>
+        <p className="text-gray-500">No similar items found</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold">Similar Items</h2>
       <div className="grid grid-cols-1 gap-4">
-        {similarItems
-          .filter(item => item.id !== currentItemId)
-          .slice(0, 3)
-          .map(item => (
-            <ItemCard key={item.id} item={item} />
-          ))}
+        {similarItems.map(item => (
+          <ItemCard key={item.id} item={item} compact />
+        ))}
       </div>
     </div>
   );

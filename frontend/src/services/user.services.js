@@ -3,7 +3,7 @@ import axios from "axios";
 
 class UserServices{
     constructor(){
-        this.baseUrl = config.apiUrl;
+        this.baseUrl = config.baseUrl;
     }
     
     async getAllUsers(){

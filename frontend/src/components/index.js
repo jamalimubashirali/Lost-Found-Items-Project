@@ -1,4 +1,3 @@
-import { CategoryFilter } from "./Home/CategoryFilter";
 import { ItemCard } from "./Items/ItemCard";
 import { ItemGrid } from "./Home/ItemGrid";
 import { FoundItemGalary } from "./Items/FoundItemGalary";
@@ -13,13 +12,9 @@ import { HowItWorks } from "./Landing/HowItWorks";
 import { StatsSection } from "./Landing/StatsSection";
 import  Login  from "./Login/Login";
 import Register from "./Registration/Register";
-import { CommunitySpotlight } from "./Home/CommunitySpotlight";
-import { TrendingItems } from "./Home/TrendingItems";
 import { QuickActions } from "./Home/QuickActions";
-import { PersonalizedRecommendations } from "./Home/PersonalizedRecommendation";
 
 export {
-    CategoryFilter,
     ItemCard,
     ItemGrid,
     FoundItemGalary,
@@ -34,8 +29,5 @@ export {
     StatsSection,
     Login,
     Register,
-    CommunitySpotlight,
-    TrendingItems,
     QuickActions,
-    PersonalizedRecommendations,
 }

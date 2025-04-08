@@ -57,7 +57,7 @@ export function Navbar() {
                   <Avatar className="h-8 w-8">
                     <AvatarImage src="/avatars/01.png" />
                     <AvatarFallback>
-                      {`${userData.name.split(" ")[0][0]}`}
+                      {`${userData ? userData.name.charAt(0) : 'U'}`}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>

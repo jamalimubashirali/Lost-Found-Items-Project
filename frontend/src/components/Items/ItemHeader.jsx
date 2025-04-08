@@ -13,11 +13,11 @@ export function ItemHeader({ title, status, date, time, location }) {
       <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-1">
           {/* <CalendarIcon className="h-4 w-4" /> */}
-          <span>{date} at {time}</span>
+          <span>{date} </span>
         </div>
         <div className="flex items-center gap-1">
           {/* <MapPinIcon className="h-4 w-4" /> */}
-          <span>{location}</span>
+          <span>{`at ${location}`}</span>
         </div>
       </div>
     </div>

@@ -101,7 +101,12 @@ const getUser = asyncHandler(async (req, res) => {
         });
     }
     return res.status(200).json({
-        user
+        user : {
+            _id : user._id,
+            username : user.username,
+            name : user.name,
+            email : user.email,
+        }
     });
 });
 
@@ -117,7 +122,12 @@ const getUserById = asyncHandler(async (req , res) => {
     }
 
     return res.status(200).json({
-        user
+        user :{
+            _id : user._id,
+            username : user.username,
+            name : user.name,
+            email : user.email,
+        }
     });
 });
 
@@ -134,7 +144,13 @@ const updateUser = asyncHandler(async (req, res) => {
     }).select("-password");
 
     return res.status(200).json({
-        updatedUser
+        user : {
+            _id : updatedUser._id,
+            username : updatedUser.username,
+            name : updatedUser.name,
+            email : updatedUser.email,
+        },
+        message : "User updated successfully"
     });
 });
 
