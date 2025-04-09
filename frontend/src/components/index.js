@@ -3,7 +3,7 @@ import { ItemGrid } from "./Home/ItemGrid";
 import { FoundItemGalary } from "./Items/FoundItemGalary";
 import { ItemGallery } from "./Items/ItemGallery";
 import { LostItemDetails } from "./Items/LostItemCreation";
-import  MatchingItems  from "./Items/MatchingItem";
+import  {MatchingItems}  from "./Items/MatchingItem";
 import Container from "./utils/Container";
 import { Footer } from "./utils/Footer";
 import { Navbar } from "./utils/Header";

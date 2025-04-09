@@ -1,48 +1,67 @@
-// import { useGetMatches } from '@/api/items' // Custom hook for API call
-// import {
-//   Card,
-//   CardContent,
-//   CardHeader,
-//   CardTitle,
-// } from '@/components/ui/card'
-// import { Skeleton } from '@/components/ui/skeleton'
-// import { MatchCard } from './MatchCard'
+import { ItemCard } from './ItemCard';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Info } from 'lucide-react';
+import { useEffect , useState } from 'react';
+import matchesService from '@/services/matches.services';
 
-// export function MatchingItems({ itemId }) {
-//   const { data: matches, isLoading } = useGetMatches(itemId)
+export function MatchingItems({ itemId }) {
+  const [matchingItems, setMatchingItems] = useState([]);
+  const handleClaimMatch = async (foundItemId) => {
+    try {
+      alert(`Match claimed! The owner of item ${foundItemId} will be notified.`);
+    } catch (error) {
+      console.error('Error claiming match:', error);
+    }
+  };
 
-//   return (
-//     <Card>
-//       <CardHeader>
-//         <CardTitle>Potential Matches</CardTitle>
-//       </CardHeader>
-//       <CardContent className="space-y-4">
-//         {isLoading ? (
-//           [...Array(3)].map((_, i) => (
-//             <Skeleton key={i} className="h-[100px] w-full rounded-lg" />
-//           ))
-//         ) : matches?.length > 0 ? (
-//           matches.map(match => (
-//             <MatchCard key={match.id} match={match} />
-//           ))
-//         ) : (
-//           <p className="text-gray-500 text-center py-4">
-//             No potential matches found yet
-//           </p>
-//         )}
-//       </CardContent>
-//     </Card>
-//   )
-// }
+  useEffect(() => {
+    (
+      async () => {
+        try {
+          const response = await matchesService.getMatches(itemId);
+          if(response?.message === "No matches found for this item"){
+            const response = await matchesService.createMatches(itemId);
+            if(response?.matches?.length > 0){
+              setMatchingItems(response.matches);
+              console.log("Matches created successfully:", response.matches);
+            }
+          } 
+          else {
+            setMatchingItems(response.matches);
+          }
+        } catch (error) {
+          console.log("Error fetching matches:", error);
+        }
+      }
+    )();
+  } , [itemId]);
 
-import React from 'react'
-
-const MatchingItem = () => {
   return (
-    <div>
-      
+    <div className="mt-8">
+      <Alert className="mb-6">
+        <Info className="h-4 w-4" />
+        <AlertTitle>Potential Matches Found!</AlertTitle>
+        <AlertDescription>
+          We found {matchingItems?.length} items that might match your lost item.
+        </AlertDescription>
+      </Alert>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {matchingItems.map((item) => (
+          <div key={item._id} className="relative">
+            <ItemCard item={item} />
+            {item?.userId !== userId && (
+              <Button 
+                size="sm" 
+                className="mt-2 w-full"
+                onClick={() => handleClaimMatch(item._id)}
+              >
+                This Might Be Mine
+              </Button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
-  )
+  );
 }
-
-export default MatchingItem
