@@ -33,6 +33,7 @@ import { useNavigate } from "react-router-dom";
 import { Container } from "@/components";
 import itemsService from "@/services/items.services";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 // Form validation schema
 const formSchema = z.object({

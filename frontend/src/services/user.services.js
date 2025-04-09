@@ -51,9 +51,17 @@ class UserServices{
         }
     }
 
-    async updateUser(id , data){
+    async updateUser(id , {
+        name,
+        email,
+        username,
+    }){
         try {
-            const response = await axios.put(`${this.baseUrl}/users/update/${id}` , data , {
+            const response = await axios.put(`${this.baseUrl}/users/update/${id}` , {
+                name,
+                email,
+                username,
+            } , {
                 withCredentials : true,
                 headers : {
                     "Content-Type" : "application/json"

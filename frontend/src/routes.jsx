@@ -17,6 +17,7 @@ const AdminPanelPage = lazy(() => import('./pages/AdminPanelPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SignupPage = lazy(() => import('./pages/SignupPage'));
+const EditProfile = lazy(() => import('./components/Profile/EditProfile'));
 
 const SuspenseWrapper = ({ children }) => (
   <Suspense fallback={<LoadingSpinner />}>
@@ -71,7 +72,7 @@ const router = createBrowserRouter([
               <ProfilePage />
             </SuspenseWrapper>
           </AuthLayout>
-        )
+        ) 
       },
       {
         path: 'items',

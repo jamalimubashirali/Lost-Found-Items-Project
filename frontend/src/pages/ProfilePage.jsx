@@ -1,22 +1,24 @@
-import { useEffect, useState } from 'react';
-import { ProfileHeader } from '@/components/Profile/ProfileHeader';
-import { ProfileStats } from '@/components/Profile/ProfileStats';
-import { ProfileItems } from '@/components/Profile/ProfileItems';
-import { ProfileTabs } from '@/components/Profile/ProfileTabs';
-import { Container } from '@/components';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import userServices from '@/services/user.services';
-import itemsService from '@/services/items.services';
+import { useEffect, useState } from "react";
+import { ProfileHeader } from "@/components/Profile/ProfileHeader";
+import { ProfileStats } from "@/components/Profile/ProfileStats";
+import { ProfileItems } from "@/components/Profile/ProfileItems";
+import { ProfileTabs } from "@/components/Profile/ProfileTabs";
+import { Container } from "@/components";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import userServices from "@/services/user.services";
+import itemsService from "@/services/items.services";
+
 
 function ProfilePage() {
-  const [activeTab, setActiveTab] = useState('lost'); // 'lost', 'found', 'reunited'
+  const [activeTab, setActiveTab] = useState("lost"); // 'lost', 'found', 'reunited'
   const [user, setUser] = useState({});
   const [userItems, setUserItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const userData = useSelector((state) => state.user.userData);
   const userRelatedItems = useSelector((state) => state.user.userRelatedItems);
   const { id } = useParams();
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +28,7 @@ function ProfilePage() {
         if (userData?._id === id) {
           setUser(userData);
           setUserItems(userRelatedItems || []);
-        } 
+        }
         // If viewing another user's profile, fetch data
         else {
           const response = await userServices.getUserById(id);
@@ -37,7 +39,7 @@ function ProfilePage() {
           }
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -71,15 +73,12 @@ function ProfilePage() {
       <div className="space-y-8">
         <ProfileHeader user={user} />
         <ProfileStats stats={user.stats} />
-        
+
         <div className="space-y-6">
-          <ProfileTabs 
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-          />
-          
-          <ProfileItems 
-            items={userItems.filter(item => item.itemType === activeTab)}
+          <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
+          <ProfileItems
+            items={userItems.filter((item) => item.itemType === activeTab)}
             emptyMessage={`No ${activeTab} items yet`}
           />
         </div>
