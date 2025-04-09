@@ -6,25 +6,38 @@ class ItemsService {
         this.baseUrl = config.baseUrl;
     }
 
-    async createItem(itemData){
+    async createItem({
+        itemName,
+        itemType,
+        description,
+        category,
+        lostDate,
+        location,
+        itemImage
+    }) {
         try {
             const formData = new FormData();
-            for (const key in itemData) {
-                formData.append(key, itemData[key]);
-            }
-    
+            formData.append("itemName", itemName);
+            formData.append("itemType", itemType);
+            formData.append("description", description);
+            formData.append("category", category);
+            formData.append("location", location);
+            formData.append("lostDate", lostDate);
+            formData.append("itemImage", itemImage);
+
+
             const response = await axios.post(`${this.baseUrl}/items/create`, formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
-    
+
             return response.data;
         } catch (error) {
             console.error("Error creating item:", error);
             throw error;
-            
+
         }
     }
 
@@ -97,14 +110,14 @@ class ItemsService {
             for (const key in itemData) {
                 formData.append(key, itemData[key]);
             }
-    
+
             const response = await axios.patch(`${this.baseUrl}/items/update-details/${id}`, formData, {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
-    
+
             return response.data;
         } catch (error) {
             console.error("Error updating item details:", error);

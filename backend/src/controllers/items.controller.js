@@ -3,46 +3,64 @@ import { asyncHandler } from "../utils/asynchandler.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createItem = asyncHandler(async (req, res) => {
-  const { itemName, description, category, location, images, lostDate } =
-    req.body;
+  const { itemName, description, category, location, lostDate, itemType } = req.body;
 
-  if (!itemName || !description || !category || !location || !lostDate) {
+  // Validate required fields
+  if (!itemName || !description || !category || !location || !lostDate || !itemType) {
     return res.status(400).json({
       message: "Please fill in all fields",
     });
   }
 
-  // Upload images to cloudinary
-  if (req.files) {x
+  let imageUrl = null;
+
+  // Handle file upload if exists
+  if (req.files && req.files.itemImage && req.files.itemImage[0]) {
     try {
-      images = await Promise.all(
-        req.files.map(async (file) => {
-          const uploadedFilePath = await uploadOnCloudinary(file);
-          if (!uploadedFilePath) {
-            throw new Error("Something went wrong while uploading images");
-          }
-          return uploadedFilePath?.url;
-        })
-      );
+      const uploadedFile = await uploadOnCloudinary(req.files.itemImage[0].path);
+      if (!uploadedFile?.url) {
+        console.error('Cloudinary upload failed:', uploadedFile);
+        return res.status(500).json({
+          message: "Failed to upload image to Cloudinary"
+        });
+      }
+      imageUrl = uploadedFile.url;
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      console.error('File upload error:', error);
+      return res.status(500).json({
+        message: "Image upload failed",
+        error: error.message
+      });
     }
   }
 
-  const item = await Item.create({
-    itemName,
-    itemType: images.length > 0 ? "found" : "lost",
-    description,
-    category,
-    location,
-    lostDate,
-    images,
-    user: req.user._id,
-  });
+  try {
+    // Create the item
+    const item = await Item.create({
+      itemName,
+      itemType, // Use the itemType from request body
+      description,
+      category,
+      location,
+      lostDate,
+      userId: req.user._id,
+      images: imageUrl ? [imageUrl] : [] // Store as array for consistency
+    });
 
-  return res.status(201).json({
-    item,
-  });
+    // Populate user details in the response
+    const populatedItem = await Item.findById(item._id).populate("userId", "name email usename createdAt");
+
+    return res.status(201).json({
+      success: true,
+      item: populatedItem
+    });
+  } catch (error) {
+    console.error('Item creation error:', error);
+    return res.status(500).json({
+      message: "Failed to create item",
+      error: error.message
+    });
+  }
 });
 
 const getAllLostItems = asyncHandler(async (_, res) => {
@@ -69,7 +87,7 @@ const updateItemDetails = asyncHandler(async (req, res) => {
     });
   }
 
-  const updatedItem = await Item.findByIdAndUpdate({ _id : id }, updatedItemData, {
+  const updatedItem = await Item.findByIdAndUpdate({ _id: id }, updatedItemData, {
     new: true,
   });
 
@@ -100,31 +118,31 @@ const deleteItem = asyncHandler(async (req, res) => {
 });
 
 const searchItems = asyncHandler(async (req, res) => {
-  const { 
-      query,
-      itemName, 
-      description, 
-      category, 
-      location,
-      itemType,
-      dateRange,
-      page = 1,
-      limit = 10
+  const {
+    query,
+    itemName,
+    description,
+    category,
+    location,
+    itemType,
+    dateRange,
+    page = 1,
+    limit = 10
   } = req.query;
 
   // Build search conditions
   const conditions = [];
-  
+
   // General search across multiple fields
   if (query) {
-      conditions.push(
-          { itemName: { $regex: query, $options: "i" } },
-          { description: { $regex: query, $options: "i" } },
-          { category: { $regex: query, $options: "i" } },
-          { location: { $regex: query, $options: "i" } }
-      );
+    conditions.push(
+      { itemName: { $regex: query, $options: "i" } },
+      { description: { $regex: query, $options: "i" } },
+      { category: { $regex: query, $options: "i" } },
+      { location: { $regex: query, $options: "i" } }
+    );
   }
-  
+
   // Specific field searches
   if (itemName) conditions.push({ itemName: { $regex: itemName, $options: "i" } });
   if (description) conditions.push({ description: { $regex: description, $options: "i" } });
@@ -134,42 +152,42 @@ const searchItems = asyncHandler(async (req, res) => {
 
   // Date range filtering
   if (dateRange) {
-      const days = parseInt(dateRange);
-      if (!isNaN(days)) {
-          const dateFilter = new Date();
-          dateFilter.setDate(dateFilter.getDate() - days);
-          conditions.push({ createdAt: { $gte: dateFilter } });
-      }
+    const days = parseInt(dateRange);
+    if (!isNaN(days)) {
+      const dateFilter = new Date();
+      dateFilter.setDate(dateFilter.getDate() - days);
+      conditions.push({ createdAt: { $gte: dateFilter } });
+    }
   }
 
   // Build final query
   const searchQuery = conditions.length > 0 ? { $or: conditions } : {};
-  
-  try {
-      // Get total count for pagination
-      const total = await Item.countDocuments(searchQuery);
-      
-      // Execute search with pagination
-      const items = await Item.find(searchQuery)
-          .sort({ createdAt: -1 })
-          .skip((page - 1) * limit)
-          .limit(parseInt(limit))
-          .populate('userId', 'name avatar'); // Include user info
 
-      return res.status(200).json({
-          success: true,
-          count: items.length,
-          total,
-          page: parseInt(page),
-          pages: Math.ceil(total / limit),
-          items
-      });
+  try {
+    // Get total count for pagination
+    const total = await Item.countDocuments(searchQuery);
+
+    // Execute search with pagination
+    const items = await Item.find(searchQuery)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .populate('userId', 'name avatar'); // Include user info
+
+    return res.status(200).json({
+      success: true,
+      count: items.length,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+      items
+    });
   } catch (error) {
-      console.error("Search error:", error);
-      return res.status(500).json({
-          success: false,
-          message: "Error performing search"
-      });
+    console.error("Search error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error performing search"
+    });
   }
 });
 
@@ -219,7 +237,7 @@ const getAllItems = asyncHandler(async (req, res) => {
   return res.status(200).json({
     items,
   });
-}); 
+});
 
 const getUserItems = asyncHandler(async (req, res) => {
   const { userId } = req.params;
