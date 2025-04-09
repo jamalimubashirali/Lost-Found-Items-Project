@@ -221,6 +221,19 @@ const getAllItems = asyncHandler(async (req, res) => {
   });
 }); 
 
+const getUserItems = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const items = await Item.find({ userId });
+  if (!items) {
+    return res.status(404).json({
+      message: "No items found for this user",
+    });
+  }
+  return res.status(200).json({
+    items,
+  });
+});
+
 export {
   createItem,
   getAllLostItems,
@@ -231,4 +244,5 @@ export {
   deleteItem,
   searchItems,
   getAllItems,
+  getUserItems
 };

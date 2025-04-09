@@ -1,38 +1,32 @@
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { GalleryFilters } from '@/components/GalleryPage/GalleryFilters';
 import { GalleryGrid } from '@/components/GalleryPage/GalleryGrid';
 import { GalleryLightbox } from '@/components/GalleryPage/GalleryLightBox';
 import { Container } from '@/components';
+import itemsService from '@/services/items.services';
 
 function GalleryPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [items, setItems] = useState([]); // State to hold all items
 
-  // In a real app, this would come from an API
-  const items = [
-    {
-      id: 1,
-      title: "Black Leather Wallet",
-      category: "wallet",
-      image: "/wallet.jpg",
-      date: "2023-05-15",
-      status: "lost"
-    },
-    {
-      id: 2,
-      title: "AirPods Pro",
-      category: "electronics",
-      image: "/airpods.jpg",
-      date: "2023-05-10",
-      status: "found"
-    },
-    // ... more items
-  ];
+  useEffect(() => {
+    (
+      async () => {
+        try {
+          const response = await itemsService.getAllItems();
+          setItems(response.items);
+        } catch (error) {
+          console.error('Error fetching items:', error);
+        }
+      }
+    )();
+  } , []);
 
   const filteredItems = items.filter(item => {
     const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = item.itemName.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 

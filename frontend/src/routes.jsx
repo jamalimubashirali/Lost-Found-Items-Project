@@ -1,18 +1,28 @@
 import { createBrowserRouter } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import App from './App';
-import LandingPage from './pages/LandingPage';
-import ProfilePage from './pages/ProfilePage';
-import RegisterItemPage from './pages/RegisterItemPage';
-import GalleryPage from './pages/GalleryPage';
-import ReportFormPage from './pages/ReportFormPage';
-import ItemDetailsPage from './pages/ItemDetailsPage';
-import DashboardPage from './pages/DashboardPage';
-import AdminPanelPage from './pages/AdminPanelPage';
 import AuthLayout from './components/AuthLayout';
-import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import LoadingSpinner from './components/ui/LoadingSpinner'; 
+
+// Lazy-loaded components
+const LandingPage = lazy(() => import('./pages/LandingPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const RegisterItemPage = lazy(() => import('./pages/RegisterItemPage'));
+const GalleryPage = lazy(() => import('./pages/GalleryPage'));
+const ReportFormPage = lazy(() => import('./pages/ReportFormPage'));
+const ItemDetailsPage = lazy(() => import('./pages/ItemDetailsPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const AdminPanelPage = lazy(() => import('./pages/AdminPanelPage'));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const SignupPage = lazy(() => import('./pages/SignupPage'));
+
+const SuspenseWrapper = ({ children }) => (
+  <Suspense fallback={<LoadingSpinner />}>
+    {children}
+  </Suspense>
+);
 
 const router = createBrowserRouter([
   {
@@ -21,60 +31,98 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <LandingPage />
+        element: (
+          <SuspenseWrapper>
+            <LandingPage />
+          </SuspenseWrapper>
+        )
       },
       {
-        path : "login",
-        element : <LoginPage />
+        path: "login",
+        element: (
+          <SuspenseWrapper>
+            <LoginPage />
+          </SuspenseWrapper>
+        )
       },
       {
-        path : "register",
-        element : <SignupPage />
+        path: "register",
+        element: (
+          <SuspenseWrapper>
+            <SignupPage />
+          </SuspenseWrapper>
+        )
       },
       {
-        path : 'home',
-        element : <AuthLayout authentication={false}>
-          <HomePage />
-        </AuthLayout>
+        path: 'home',
+        element: (
+          <AuthLayout authentication={false}>
+            <SuspenseWrapper>
+              <HomePage />
+            </SuspenseWrapper>
+          </AuthLayout>
+        )
       },
       {
-        path:'profile/:id',
-        element : <AuthLayout authentication={false}>
-          <ProfilePage />
-        </AuthLayout>
+        path: 'profile/:id',
+        element: (
+          <AuthLayout authentication={false}>
+            <SuspenseWrapper>
+              <ProfilePage />
+            </SuspenseWrapper>
+          </AuthLayout>
+        )
       },
       {
         path: 'items',
         children: [
           {
             index: true,
-            element: <AuthLayout authentication={false}>
-              <GalleryPage />
-            </AuthLayout>,
+            element: (
+              <AuthLayout authentication={false}>
+                <SuspenseWrapper>
+                  <GalleryPage />
+                </SuspenseWrapper>
+              </AuthLayout>
+            )
           },
           {
             path: ':itemId',
-            element: <AuthLayout authentication={false}>
-              <ItemDetailsPage />
-            </AuthLayout>
+            element: (
+              <AuthLayout authentication={false}>
+                <SuspenseWrapper>
+                  <ItemDetailsPage />
+                </SuspenseWrapper>
+              </AuthLayout>
+            )
           },
           {
             path: 'register-item',
-            element: <AuthLayout authentication={false}>
-              <RegisterItemPage />
+            element: (
+              <AuthLayout authentication={false}>
+                <SuspenseWrapper>
+                  <RegisterItemPage />
+                </SuspenseWrapper>
               </AuthLayout>
+            )
           }
         ]
       },
       {
         path: 'report',
-        element: <ReportFormPage />
+        element: (
+          <SuspenseWrapper>
+            <ReportFormPage />
+          </SuspenseWrapper>
+        )
       },
       {
         path: 'dashboard',
         element: (
           <ProtectedRoute>
-            <DashboardPage />
+            <SuspenseWrapper>
+              <DashboardPage />
+            </SuspenseWrapper>
           </ProtectedRoute>
         )
       },
@@ -82,7 +130,9 @@ const router = createBrowserRouter([
         path: 'admin',
         element: (
           <ProtectedRoute adminOnly>
-            <AdminPanelPage />
+            <SuspenseWrapper>
+              <AdminPanelPage />
+            </SuspenseWrapper>
           </ProtectedRoute>
         )
       }

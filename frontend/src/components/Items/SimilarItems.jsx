@@ -9,6 +9,7 @@ export function SimilarItems({ category, currentItemId }) {
   const [error, setError] = useState(null);
   const [isEmpty, setIsEmpty] = useState(false);
 
+  // Fetch similar items based on the category and current item ID
   useEffect(() => {
     const fetchSimilarItems = async () => {
       setIsLoading(true);
@@ -35,7 +36,7 @@ export function SimilarItems({ category, currentItemId }) {
       }
     };
 
-    if (category) { // Only fetch if category exists
+    if (category) { 
       fetchSimilarItems();
     } else {
       setIsLoading(false);

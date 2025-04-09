@@ -9,6 +9,7 @@ import {
   updateItemStatus,
   getAllItems,
   getItemById,
+  getUserItems,
 } from "../controllers/items.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 
@@ -23,5 +24,6 @@ itemRouter.get("/:id", authMiddleware, getItemById);
 itemRouter.patch("/update-status/:id", authMiddleware, updateItemStatus);
 itemRouter.patch("/update-details/:id", authMiddleware, updateItemDetails);
 itemRouter.delete("/delete-item/:id", authMiddleware, deleteItem);
+itemRouter.get("/user/:userId", authMiddleware, getUserItems);
 
 export { itemRouter };

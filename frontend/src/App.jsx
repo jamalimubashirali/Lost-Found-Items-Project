@@ -4,9 +4,10 @@ import { Footer } from './components'
 import { useDispatch } from 'react-redux'
 import { login } from './store/auth.slice'
 import userServices from './services/user.services'
-import { use, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { setUser } from './store/user.slice'
+import { setUser, setUserRelatedItems } from './store/user.slice'
+import itemsService from './services/items.services'
 
 function App() {
   const dispatch = useDispatch()
@@ -20,6 +21,10 @@ function App() {
           if (response) {
             dispatch(setUser(response.user))
             dispatch(login())
+            const userRelatedItems = await itemsService.getUserItems(response.user._id);
+            if(userRelatedItems) {
+              dispatch(setUserRelatedItems(userRelatedItems.items));
+            }
             navigate('/home');
           }
         } catch (error) {

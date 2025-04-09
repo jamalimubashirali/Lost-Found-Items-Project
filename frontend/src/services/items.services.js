@@ -131,6 +131,16 @@ class ItemsService {
             throw error;
         }
     }
+
+    async getUserItems(userId) {
+        try {
+            const response = await axios.get(`${this.baseUrl}/items/user/${userId}`, { withCredentials: true });
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching user items:", error);
+            throw error;
+        }
+    }
 }
 
 const itemsService = new ItemsService();
