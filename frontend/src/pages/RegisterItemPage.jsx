@@ -86,7 +86,6 @@ export function RegisterItemPage() {
         location: data.location,
         lostDate: data.date,
       });
-      console.log(response.item);
       navigate(`/items/${response.item._id}`);
     } catch (error) {
       console.error("Error submitting form:", error);

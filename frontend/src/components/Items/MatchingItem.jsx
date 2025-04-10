@@ -50,7 +50,7 @@ export function MatchingItems({ itemId }) {
         {matchingItems.map((item) => (
           <div key={item._id} className="relative">
             <ItemCard item={item} />
-            {item?.userId !== userId && (
+            {/* {item?.userId !== userId && (
               <Button 
                 size="sm" 
                 className="mt-2 w-full"
@@ -58,7 +58,7 @@ export function MatchingItems({ itemId }) {
               >
                 This Might Be Mine
               </Button>
-            )}
+            )} */}
           </div>
         ))}
       </div>

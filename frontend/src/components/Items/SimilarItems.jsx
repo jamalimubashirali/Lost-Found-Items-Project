@@ -80,7 +80,7 @@ export function SimilarItems({ category, currentItemId }) {
       <h2 className="text-xl font-semibold">Similar Items</h2>
       <div className="grid grid-cols-1 gap-4">
         {similarItems.map(item => (
-          <ItemCard key={item.id} item={item} compact />
+          <ItemCard key={item._id} item={item} compact />
         ))}
       </div>
     </div>
