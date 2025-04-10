@@ -20,6 +20,8 @@ import { login , logout } from "@/store/auth.slice";
 import { useNavigate } from "react-router-dom";
 import authService from "@/services/auth.services";
 import { setUser } from "@/store/user.slice";
+import { setUserRelatedItems } from "@/store/user.slice";
+import itemsService from "@/services/items.services";
 
 
 // Define validation schema with Zod
@@ -52,6 +54,11 @@ const Login = () => {
       if(loginData) {
           dispatch(login());
           dispatch(setUser(loginData.user));
+          const userItems = await itemsService.getUserItems(loginData.user._id);
+          console.log(userItems);
+          if(userItems) {
+            dispatch(setUserRelatedItems(userItems?.items));
+          }
           navigate('/home');
       } else {
         dispatch(logout());
