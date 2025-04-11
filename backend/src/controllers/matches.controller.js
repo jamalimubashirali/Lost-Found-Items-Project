@@ -67,13 +67,10 @@ const createMatches = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "No new matches found" });
   }
 
-  await Match.insertMany(newMatches).populate(
-    [item.itemType === "lost" ? "lostItemId" : "foundItemId"],
-    "itemName description category location images lostDate createdAt"
-  );
+  await Match.insertMany(newMatches);
   res.status(201).json({
-    message: `${newMatches.length} new matches created`,
-    matches: newMatches,
+    message: `New matches created`,
+    matches: newMatches.length,
   });
 });
 

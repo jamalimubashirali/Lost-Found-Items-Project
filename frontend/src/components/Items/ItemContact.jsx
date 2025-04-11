@@ -1,5 +1,6 @@
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
 
 export function ItemContact({ user }) {
   return (
@@ -17,7 +18,9 @@ export function ItemContact({ user }) {
         </div>
       </div>
 
-      <Button className="w-full">Contact About This Item</Button>
+      <Link to={`/items/item-chat`}>
+        <Button className="w-full mt-10">Contact About This Item</Button>
+      </Link>
 
       <div className="text-center text-sm text-muted-foreground">
         <p>Please be cautious when sharing personal information</p>

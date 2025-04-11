@@ -22,9 +22,12 @@ export function MatchingItems({ itemId }) {
           const response = await matchesService.getMatches(itemId);
           if(response?.message === "No matches found for this item"){
             const response = await matchesService.createMatches(itemId);
-            if(response?.matches?.length > 0){
-              setMatchingItems(response.matches);
-              console.log("Matches created successfully:", response.matches);
+            if(response?.matches > 0 && response?.message === "New matches created"){
+              const newResponse = await matchesService.getMatches(itemId);
+              console.log("New matches created:", newResponse);
+              if(newResponse?.matches.length > 0){
+                setMatchingItems(newResponse.matches);
+              }
             }
           } 
           else {

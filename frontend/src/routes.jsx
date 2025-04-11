@@ -17,6 +17,7 @@ const AdminPanelPage = lazy(() => import('./pages/AdminPanelPage'));
 const HomePage = lazy(() => import('./pages/HomePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SignupPage = lazy(() => import('./pages/SignupPage'));
+const ChatPage = lazy(() => import('./pages/ChatPage'));
 
 const SuspenseWrapper = ({ children }) => (
   <Suspense fallback={<LoadingSpinner />}>
@@ -102,6 +103,15 @@ const router = createBrowserRouter([
               <AuthLayout authentication={false}>
                 <SuspenseWrapper>
                   <RegisterItemPage />
+                </SuspenseWrapper>
+              </AuthLayout>
+            )
+          },{
+            path : 'item-chat',
+            element : (
+              <AuthLayout authentication={false}>
+                <SuspenseWrapper>
+                  <ChatPage />
                 </SuspenseWrapper>
               </AuthLayout>
             )

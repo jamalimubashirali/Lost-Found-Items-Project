@@ -5,14 +5,14 @@ export function ProfileItemCard({ item }) {
     <div className="border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
       <div className="aspect-square bg-gray-100 relative">
         <img
-          src={item.image}
+          src={item.images[0]}
           alt={item.title}
           className="w-full h-full object-cover"
         />
         <Badge 
           variant={item.itemType === 'lost' ? 'destructive' : 
                   item.itemType === 'found' ? 'success' : 'default'}
-          className="absolute top-2 left-2"
+          className={`absolute top-2 left-2 ${item.itemType === 'found' ? 'bg-green-100 text-green-800' : ""}`}
         >
           {item.itemType === 'lost' ? 'Lost' : 
            item.itemType === 'found' ? 'Found' : 'Reunited'}

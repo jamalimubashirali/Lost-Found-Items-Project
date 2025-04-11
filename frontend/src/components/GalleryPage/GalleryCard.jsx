@@ -9,13 +9,13 @@ export function GalleryCard({ item, onClick }) {
     >
       <div className="aspect-square bg-gray-100 relative overflow-hidden">
         <img
-          src={item.image}
+          src={item.images[0]}
           alt={item.itemName}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform"
         />
         <Badge 
           variant={item.itemType === 'lost' ? 'destructive' : 'success'}
-          className="absolute top-2 left-2"
+          className={`absolute top-2 left-2 ${item.itemType === 'found' ? 'bg-green-100 text-green-800' : ''}`}
         >
           {item.itemType === 'lost' ? 'Lost' : 'Found'}
         </Badge>

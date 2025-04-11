@@ -10,7 +10,7 @@ export function ItemCard({ item }) {
       <div className="h-48 bg-gray-100 relative overflow-hidden">
         {item.images && item.images.length > 0 ? (
           <img
-            src={`/uploads/${item.images[0]}`}
+            src={`${item.images[0]}`}
             alt={item.itemName}
             className="w-full h-full object-cover"
           />
