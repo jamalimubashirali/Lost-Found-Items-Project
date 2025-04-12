@@ -153,33 +153,48 @@ const getMatches = asyncHandler(async (req, res) => {
 
 const updateMatchStatus = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { foundItemId } = req.body;
 
-  if (!status) {
+  if(!foundItemId) {
     return res.status(400).json({
-      message: "Please provide status",
+      message: "foundItemId is required",
     });
   }
 
-  const updatedMatch = await Match.findByIdAndUpdate(
-    id,
-    {
-      status,
-    },
-    {
-      new: true,
-    }
-  );
-
-  if (!updatedMatch) {
+  const match = await Match.findById(id);
+  if (!match) {
     return res.status(404).json({
       message: "Match not found",
     });
   }
 
+  const foundItem = await Item.findById(foundItemId);
+  if (!foundItem) {
+    return res.status(404).json({
+      message: "Found item not found",
+    });
+  }
+
+  foundItem.status = "Resolved";
+  await foundItem.save();
+
+  const lostItem = await Item.findById(match.lostItemId);
+  if (!lostItem) {
+    return res.status(404).json({
+      message: "Lost item not found",
+    });
+  }
+
+  lostItem.status = "Resolved";
+  await lostItem.save();
+
+  match.status = "Confirmed";
+  await match.save();
+
   res.status(200).json({
-    updatedMatch,
+    message: "Match status updated successfully",
   });
+
 });
 
 export { createMatches, getMatches, updateMatchStatus };

@@ -34,9 +34,9 @@ class MatchesService {
         }
     }
 
-    async updateMatchStatus(id, status) {
+    async updateMatchStatus(matchId , foundItemId) {
         try {
-            const response = await axios.patch(`${this.baseUrl}/update-match/${id}`, {status} , {
+            const response = await axios.patch(`${this.baseUrl}/update-match/${matchId}`, {foundItemId} , {
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",

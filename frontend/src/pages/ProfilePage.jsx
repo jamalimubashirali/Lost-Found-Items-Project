@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { ProfileHeader } from "@/components/Profile/ProfileHeader";
-import { ProfileStats } from "@/components/Profile/ProfileStats";
 import { ProfileItems } from "@/components/Profile/ProfileItems";
 import { ProfileTabs } from "@/components/Profile/ProfileTabs";
 import { Container } from "@/components";
@@ -72,7 +71,6 @@ function ProfilePage() {
     <Container className="py-8 min-h-screen">
       <div className="space-y-8">
         <ProfileHeader user={user} />
-        <ProfileStats stats={user.stats} />
 
         <div className="space-y-6">
           <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />

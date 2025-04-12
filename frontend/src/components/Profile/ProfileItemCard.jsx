@@ -13,11 +13,16 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import matchesService from "@/services/matches.services";
+import { useSelector } from "react-redux";
+import { setUserRelatedItems } from "@/store/user.slice";
+import itemsService from "@/services/items.services";
+import { useDispatch } from "react-redux";
 
 export function ProfileItemCard({ item }) {
   const [open, setOpen] = useState(false);
   const [matchingItems, setMatchingItems] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleItemAction = () => {
     if (item.itemType === "found") {
@@ -28,8 +33,9 @@ export function ProfileItemCard({ item }) {
       setOpen(true);
     }
   };
-
-  // Dummy data for matching items
+  const userId = useSelector((state) => state.user.userData._id);
+  
+  // Function to handle the confirmation of item reunion
   useEffect(() => {
     ;( async () => {
       const response = await matchesService.getMatches(item._id);
@@ -50,10 +56,21 @@ export function ProfileItemCard({ item }) {
     })();
   } , [item]);
 
-  const handleConfirm = (matchId) => {
-    // This just shows an alert - you'll implement the actual database call
-    alert(`Confirmed reunion with item ID: ${matchId}`);
-    setOpen(false);
+
+  // Function to handle the confirmation of item reunion
+  const handleConfirm = async (matchId , foundItemId) => {
+    try {
+      const response = await matchesService.updateMatchStatus(matchId, foundItemId);
+      if(response?.message === "Match status updated successfully"){
+        const response = await itemsService.getUserItems(userId);
+        if(response?.items){
+          dispatch(setUserRelatedItems(response.items));
+          setOpen(false);
+        }
+      }
+    } catch (error) {
+      
+    }
   };
 
   return (
@@ -131,7 +148,7 @@ export function ProfileItemCard({ item }) {
                             <div className="p-4">
                               <Button 
                                 size="sm"
-                                onClick={() => handleConfirm(match.id)}
+                                onClick={() => handleConfirm(match._id , match.foundItemId)}
                               >
                                 Confirm
                               </Button>
@@ -162,7 +179,7 @@ export function ProfileItemCard({ item }) {
             )}
           </>
         )}
-        {item.status === "Reunited" && (
+        {item.status === "Resolved" && (
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
             Claimed
           </Badge>
