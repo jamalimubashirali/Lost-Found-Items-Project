@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ProfileHeader } from "@/components/Profile/ProfileHeader";
+import { ProfileStats } from "@/components/Profile/ProfileStats";
 import { ProfileItems } from "@/components/Profile/ProfileItems";
 import { ProfileTabs } from "@/components/Profile/ProfileTabs";
 import { Container } from "@/components";
@@ -17,6 +18,10 @@ function ProfilePage() {
   const userData = useSelector((state) => state.user.userData);
   const userRelatedItems = useSelector((state) => state.user.userRelatedItems);
   const { id } = useParams();
+
+
+  const userLostItems = userRelatedItems.filter((item) => item.itemType === "lost").length;
+  const userFoundItems = userRelatedItems.filter((item) => item.itemType === "found").length;
   
 
   useEffect(() => {
@@ -71,6 +76,10 @@ function ProfilePage() {
     <Container className="py-8 min-h-screen">
       <div className="space-y-8">
         <ProfileHeader user={user} />
+        <ProfileStats stats={{
+          totalLostItems: userLostItems,
+          totalFoundItems: userFoundItems,
+        }} />
 
         <div className="space-y-6">
           <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />

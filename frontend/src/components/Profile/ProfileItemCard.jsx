@@ -36,25 +36,27 @@ export function ProfileItemCard({ item }) {
   const userId = useSelector((state) => state.user.userData._id);
   
   // Function to handle the confirmation of item reunion
-  useEffect(() => {
-    ;( async () => {
-      const response = await matchesService.getMatches(item._id);
-      if(response?.matches?.length > 0){
-        console.log("Matches found:", response.matches);
-        setMatchingItems(response.matches);
-      }
-      else {
-        const response = await matchesService.createMatches(item._id);
-        if(response?.matches > 0 && response?.message === "New matches created"){
-          const newResponse = await matchesService.getMatches(item._id);
-          console.log("New matches created:", newResponse);
-          if(newResponse?.matches?.length > 0){
-            setMatchingItems(newResponse.matches);
+  if(item.status === "Pending" && item.itemType === "lost") {
+    useEffect(() => {
+      ;( async () => {
+        const response = await matchesService.getMatches(item._id);
+        if(response?.matches?.length > 0){
+          console.log("Matches found:", response.matches);
+          setMatchingItems(response.matches);
+        }
+        else {
+          const response = await matchesService.createMatches(item._id);
+          if(response?.matches > 0 && response?.message === "New matches created"){
+            const newResponse = await matchesService.getMatches(item._id);
+            console.log("New matches created:", newResponse);
+            if(newResponse?.matches?.length > 0){
+              setMatchingItems(newResponse.matches);
+            }
           }
         }
-      }
-    })();
-  } , [item]);
+      })();
+    } , [item]);
+  }
 
 
   // Function to handle the confirmation of item reunion

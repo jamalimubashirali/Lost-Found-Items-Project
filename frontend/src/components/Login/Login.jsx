@@ -55,7 +55,6 @@ const Login = () => {
           dispatch(login());
           dispatch(setUser(loginData.user));
           const userItems = await itemsService.getUserItems(loginData.user._id);
-          console.log(userItems);
           if(userItems) {
             dispatch(setUserRelatedItems(userItems?.items));
           }
