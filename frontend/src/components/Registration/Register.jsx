@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link, useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import { Loader2 , Smartphone } from "lucide-react";
 import { useState } from "react";
 import authService from "@/services/auth.services";
 import { useDispatch } from "react-redux";
@@ -37,6 +37,10 @@ const formSchema = z
     email: z.string().email({
       message: "Please enter a valid email address.",
     }),
+    phone: z.string()
+    .regex(/^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,6}$/, "Invalid phone number")
+    .optional()
+    .or(z.literal('')),
     password: z
       .string()
       .min(8, {
@@ -68,6 +72,7 @@ const Register = () => {
       name: "",
       password: "",
       confirmPassword: "",
+      phone : ""
     },
   });
 
@@ -172,6 +177,29 @@ const Register = () => {
                     </FormItem>
                   )}
                 />
+
+<FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number (Optional)</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Smartphone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              type="tel"
+                              placeholder="+1234567890"
+                              autoComplete="tel"
+                              className="pl-10"
+                              {...field}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                 <FormField
                   control={form.control}

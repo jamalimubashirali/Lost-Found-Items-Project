@@ -9,11 +9,13 @@ import { Container } from "@/components";
 import { useEffect, useState } from "react";
 import itemsService from "@/services/items.services";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSelector } from "react-redux";
 
 function ItemDetailsPage() {
   const { itemId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [item, setItem] = useState({});
+  const currentUserId = useSelector((state) => state.user.userData._id);
 
   useEffect(() => {
     (async () => {
@@ -78,7 +80,9 @@ function ItemDetailsPage() {
 
         {/* Right Column */}
         <div className="space-y-8">
-          <ItemContact user={item.userId} itemId={item._id} />
+          {item.userId._id !== currentUserId && (
+            <ItemContact user={item.userId} itemId={item._id} />
+          )}
 
           <SimilarItems category={item.category} currentItemId={item._id} />
         </div>

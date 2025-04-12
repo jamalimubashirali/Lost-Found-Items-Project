@@ -3,7 +3,7 @@ import { User } from '../models/User.model.js';
 import { asyncHandler } from '../utils/asynchandler.js';
 
 const register = asyncHandler(async (req, res) => {
-    const { username, name, email, password } = req.body;
+    const { username, name, email, password , phone} = req.body;
 
     if (!username || !name || !email || !password) {
         return res.status(400).json({
@@ -25,6 +25,7 @@ const register = asyncHandler(async (req, res) => {
         name : name,
         email : email,
         password : password,
+        phone
      });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
         expiresIn: "30d",

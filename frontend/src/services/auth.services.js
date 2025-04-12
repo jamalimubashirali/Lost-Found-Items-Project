@@ -24,6 +24,7 @@ class AuthService {
                 name  : data.name,
                 email : data.email,
                 password : data.password,
+                phone : data.phone,
              } , {
                 withCredentials: true,
             });
