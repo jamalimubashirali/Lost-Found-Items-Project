@@ -116,7 +116,7 @@ const getMatches = asyncHandler(async (req, res) => {
     },
     {
       $project: {
-        _id: "$matchedItem._id",
+        foundItemId: "$matchedItem._id",
         itemName: "$matchedItem.itemName",
         description: "$matchedItem.description",
         category: "$matchedItem.category",

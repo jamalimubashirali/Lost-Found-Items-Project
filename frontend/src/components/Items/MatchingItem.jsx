@@ -31,6 +31,7 @@ export function MatchingItems({ itemId }) {
             }
           } 
           else {
+            console.log(response.matches);
             setMatchingItems(response.matches);
           }
         } catch (error) {
