@@ -21,6 +21,10 @@ function App() {
           if (response) {
             dispatch(setUser(response.user))
             dispatch(login())
+            if(response.user?.role === "admin"){
+              navigate('/admin-panel');
+              return;
+            }
             const userRelatedItems = await itemsService.getUserItems(response.user._id);
             if(userRelatedItems) {
               dispatch(setUserRelatedItems(userRelatedItems.items));

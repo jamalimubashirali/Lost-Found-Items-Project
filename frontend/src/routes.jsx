@@ -10,7 +10,6 @@ const LandingPage = lazy(() => import('./pages/LandingPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const RegisterItemPage = lazy(() => import('./pages/RegisterItemPage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
-const ReportFormPage = lazy(() => import('./pages/ReportFormPage'));
 const ItemDetailsPage = lazy(() => import('./pages/ItemDetailsPage'));
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const AdminPanelPage = lazy(() => import('./pages/AdminPanelPage'));
@@ -57,7 +56,7 @@ const router = createBrowserRouter([
       {
         path: 'home',
         element: (
-          <AuthLayout authentication={false}>
+          <AuthLayout authentication>
             <SuspenseWrapper>
               <HomePage />
             </SuspenseWrapper>
@@ -67,7 +66,7 @@ const router = createBrowserRouter([
       {
         path: 'profile/:id',
         element: (
-          <AuthLayout authentication={false}>
+          <AuthLayout authentication>
             <SuspenseWrapper>
               <ProfilePage />
             </SuspenseWrapper>
@@ -80,7 +79,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: (
-              <AuthLayout authentication={false}>
+              <AuthLayout authentication>
                 <SuspenseWrapper>
                   <GalleryPage />
                 </SuspenseWrapper>
@@ -90,7 +89,7 @@ const router = createBrowserRouter([
           {
             path: ':itemId',
             element: (
-              <AuthLayout authentication={false}>
+              <AuthLayout authentication>
                 <SuspenseWrapper>
                   <ItemDetailsPage />
                 </SuspenseWrapper>
@@ -100,7 +99,7 @@ const router = createBrowserRouter([
           {
             path: 'register-item',
             element: (
-              <AuthLayout authentication={false}>
+              <AuthLayout authentication>
                 <SuspenseWrapper>
                   <RegisterItemPage />
                 </SuspenseWrapper>
@@ -109,7 +108,7 @@ const router = createBrowserRouter([
           },{
             path : 'item-chat',
             element : (
-              <AuthLayout authentication={false}>
+              <AuthLayout authentication>
                 <SuspenseWrapper>
                   <ChatPage />
                 </SuspenseWrapper>
@@ -119,31 +118,27 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: 'report',
-        element: (
-          <SuspenseWrapper>
-            <ReportFormPage />
-          </SuspenseWrapper>
-        )
-      },
-      {
         path: 'dashboard',
         element: (
-          <ProtectedRoute>
+          <AuthLayout authentication>
+            <ProtectedRoute adminOnly>
             <SuspenseWrapper>
               <DashboardPage />
             </SuspenseWrapper>
           </ProtectedRoute>
+          </AuthLayout>
         )
       },
       {
-        path: 'admin',
+        path: 'admin-panel',
         element: (
-          <ProtectedRoute adminOnly>
+          <AuthLayout authentication>
+            <ProtectedRoute adminOnly>
             <SuspenseWrapper>
               <AdminPanelPage />
             </SuspenseWrapper>
           </ProtectedRoute>
+          </AuthLayout>
         )
       }
     ]

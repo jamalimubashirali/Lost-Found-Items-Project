@@ -54,6 +54,11 @@ const Login = () => {
       if(loginData) {
           dispatch(login());
           dispatch(setUser(loginData.user));
+          console.log(loginData.user);
+          if(loginData.user.role === 'admin') {
+            navigate('/admin-panel');
+            return;
+          }
           const userItems = await itemsService.getUserItems(loginData.user._id);
           if(userItems) {
             dispatch(setUserRelatedItems(userItems?.items));

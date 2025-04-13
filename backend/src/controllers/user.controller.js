@@ -41,6 +41,7 @@ const register = asyncHandler(async (req, res) => {
             username : user.username,
             name : user.name,
             email : user.email,
+            role : user.role,
             createdAt : user.createdAt,
         },
         message : "User Registered Successfully"
@@ -83,6 +84,7 @@ const login = asyncHandler(async (req, res) => {
             username : user.username,
             name : user.name,
             email : user.email,
+            role : user.role,
             createdAt : user.createdAt,
         },
         message : "User Registered Successfully"
@@ -109,6 +111,7 @@ const getUser = asyncHandler(async (req, res) => {
             username : user.username,
             name : user.name,
             email : user.email,
+            role : user.role,
             createdAt : user.createdAt,
         }
     });
@@ -131,6 +134,7 @@ const getUserById = asyncHandler(async (req , res) => {
             username : user.username,
             name : user.name,
             email : user.email,
+            role : user.role,
             createdAt : user.createdAt,
         }
     });
@@ -154,6 +158,7 @@ const updateUser = asyncHandler(async (req, res) => {
             username : updatedUser.username,
             name : updatedUser.name,
             email : updatedUser.email,
+            role : updatedUser.role,
             createdAt : updatedUser.createdAt,
         },
         message : "User updated successfully"
