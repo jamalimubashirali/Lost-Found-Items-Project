@@ -233,7 +233,9 @@ const updateItemStatus = asyncHandler(async (req, res) => {
 });
 
 const getAllItems = asyncHandler(async (req, res) => {
-  const items = await Item.find();
+  const items = await Item.find().sort({
+    createdAt: -1,
+  }).populate("userId", "name email usename");
   return res.status(200).json({
     items,
   });

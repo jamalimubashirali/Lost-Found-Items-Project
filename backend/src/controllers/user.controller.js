@@ -166,7 +166,11 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 const getAllUsers = asyncHandler(async (_, res) => {
-    const users = await User.find({}).select("-password");
+    const users = await User.find({
+        role : { $ne : "admin"}
+    }).sort({
+        createdAt : -1
+    }).select("-password");
     return res.status(200).json({
         users
     });
