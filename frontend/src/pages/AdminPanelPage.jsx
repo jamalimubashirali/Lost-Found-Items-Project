@@ -86,13 +86,16 @@ const AdminPanelPage = () => {
     })();
   }, []);
 
-
   const stats = {
     totalItems: totalItems.length,
     pendingItems: totalItems.filter((item) => item.status === "Pending").length,
     completedItems: totalItems.filter((item) => item.status === "Resolved")
       .length,
     totalUsers: totalUsers.length,
+    totalLostItems: totalItems.filter((item) => item.itemType === "lost")
+      .length,
+    totalFoundItems: totalItems.filter((item) => item.itemType === "found")
+      .length,
     topCategories: [
       { name: "Electronics", count: 36 },
       { name: "Bags", count: 24 },
@@ -178,9 +181,7 @@ const AdminPanelPage = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              <span className="text-green-500 font-medium">
-                +5% {" "} 
-              </span>
+              <span className="text-green-500 font-medium">+5% </span>
               from last month
             </p>
           </CardContent>
@@ -327,7 +328,11 @@ const AdminPanelPage = () => {
                 <div className="flex gap-2">
                   <div className="relative w-64">
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Search users..." className="pl-8" onChange = {(e) => setUserSearchQuery(e.target.value)} />
+                    <Input
+                      placeholder="Search users..."
+                      className="pl-8"
+                      onChange={(e) => setUserSearchQuery(e.target.value)}
+                    />
                   </div>
                 </div>
                 <Button>Add User</Button>
@@ -462,7 +467,9 @@ const AdminPanelPage = () => {
                           <Badge variant="destructive" className="mb-2">
                             Lost
                           </Badge>
-                          <p className="text-2xl font-bold">68</p>
+                          <p className="text-2xl font-bold">
+                            {stats.totalLostItems}
+                          </p>
                           <p className="text-sm text-muted-foreground">items</p>
                         </div>
                       </CardContent>
@@ -471,7 +478,9 @@ const AdminPanelPage = () => {
                       <CardContent className="pt-6">
                         <div className="flex flex-col items-center text-center">
                           <Badge className="mb-2">Found</Badge>
-                          <p className="text-2xl font-bold">52</p>
+                          <p className="text-2xl font-bold">
+                            {stats.totalFoundItems}
+                          </p>
                           <p className="text-sm text-muted-foreground">items</p>
                         </div>
                       </CardContent>
@@ -521,7 +530,7 @@ const AdminPanelPage = () => {
                   ))}
                 </div>
 
-                <Separator className="my-6" />
+                {/* <Separator className="my-6" />
 
                 <div>
                   <h4 className="font-medium mb-4">Recent Activity</h4>
@@ -566,11 +575,11 @@ const AdminPanelPage = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </CardContent>
             </Card>
 
-            <Card className="md:col-span-2">
+            {/* <Card className="md:col-span-2">
               <CardHeader>
                 <CardTitle>Activity Timeline</CardTitle>
                 <CardDescription>
@@ -646,20 +655,20 @@ const AdminPanelPage = () => {
                   </Card>
                 </div>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </TabsContent>
       </Tabs>
 
       {/* Dialog for viewing user details */}
-      <Dialog open={isViewUserOpen} onOpenChange={setIsViewUserOpen}>
+      {/* <Dialog open={isViewUserOpen} onOpenChange={setIsViewUserOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>User Profile</DialogTitle>
             <DialogDescription>
               Detailed information about this user.
             </DialogDescription>
-          </DialogHeader>
+          </DialogHeader> */}
           {/* {selectedUser && (
             <div className="space-y-4">
               <div className="flex flex-col items-center justify-center gap-2 py-4">
@@ -703,17 +712,17 @@ const AdminPanelPage = () => {
               </div>
             </div>
           )} */}
-          <DialogFooter className="flex space-x-2 justify-end">
+          {/* <DialogFooter className="flex space-x-2 justify-end">
             <Button variant="outline" onClick={() => setIsViewUserOpen(false)}>
               Close
             </Button>
             <Button>View Activity</Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       {/* Dialog for confirming item deletion */}
-      <Dialog open={isDeleteItemOpen} onOpenChange={setIsDeleteItemOpen}>
+      {/* <Dialog open={isDeleteItemOpen} onOpenChange={setIsDeleteItemOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
@@ -721,7 +730,7 @@ const AdminPanelPage = () => {
               Are you sure you want to delete this item? This action cannot be
               undone.
             </DialogDescription>
-          </DialogHeader>
+          </DialogHeader> */}
           {/* {selectedItem && (
             <div>
               <p className="mb-4">
@@ -737,7 +746,7 @@ const AdminPanelPage = () => {
               </div>
             </div>
           )} */}
-          <DialogFooter className="flex space-x-2 justify-end">
+          {/* <DialogFooter className="flex space-x-2 justify-end">
             <Button
               variant="outline"
               // onClick={() => setIsDeleteItemOpen(false)}
@@ -747,7 +756,7 @@ const AdminPanelPage = () => {
             <Button variant="destructive">Delete Item</Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };
