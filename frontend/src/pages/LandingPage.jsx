@@ -12,9 +12,6 @@ function LandingPage() {
         <main> {/* Constrain max width */}
 
         <HeroSection />
-          <Container className={"text-center"}>
-            This is a simple container component that centers its children and adds some padding.
-          </Container>
           <section className="container px-4 py-12"> {/* Ensure consistent padding */}
             {/* ... rest of your code ... */}
           </section>

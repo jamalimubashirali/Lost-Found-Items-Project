@@ -141,10 +141,6 @@ const AdminPanelPage = () => {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
         <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm">
-            <Settings className="h-4 w-4 mr-2" />
-            Settings
-          </Button>
         </div>
       </div>
 
@@ -232,7 +228,7 @@ const AdminPanelPage = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button>Add Item</Button>
+                {/* <Button>Add Item</Button> */}
               </div>
             </CardHeader>
             <CardContent>
@@ -335,7 +331,7 @@ const AdminPanelPage = () => {
                     />
                   </div>
                 </div>
-                <Button>Add User</Button>
+                {/* <Button>Add User</Button> */}
               </div>
             </CardHeader>
             <CardContent>
@@ -490,7 +486,8 @@ const AdminPanelPage = () => {
               </CardContent>
             </Card>
 
-            <Card>
+            <>
+            {/* <Card>
               <CardHeader>
                 <CardTitle>Top Categories</CardTitle>
                 <CardDescription>
@@ -530,7 +527,7 @@ const AdminPanelPage = () => {
                   ))}
                 </div>
 
-                {/* <Separator className="my-6" />
+                <Separator className="my-6" />
 
                 <div>
                   <h4 className="font-medium mb-4">Recent Activity</h4>
@@ -575,11 +572,11 @@ const AdminPanelPage = () => {
                       </div>
                     </div>
                   </div>
-                </div> */}
+                </div>
               </CardContent>
             </Card>
 
-            {/* <Card className="md:col-span-2">
+            <Card className="md:col-span-2">
               <CardHeader>
                 <CardTitle>Activity Timeline</CardTitle>
                 <CardDescription>
@@ -656,6 +653,7 @@ const AdminPanelPage = () => {
                 </div>
               </CardContent>
             </Card> */}
+            </>
           </div>
         </TabsContent>
       </Tabs>

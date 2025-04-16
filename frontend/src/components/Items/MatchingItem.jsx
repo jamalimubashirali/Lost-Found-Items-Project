@@ -47,7 +47,7 @@ export function MatchingItems({ itemId }) {
         <Info className="h-4 w-4" />
         <AlertTitle>Potential Matches Found!</AlertTitle>
         <AlertDescription>
-          We found {matchingItems?.length} items that might match your lost item.
+          We found {matchingItems?.length} items that might match your item.
         </AlertDescription>
       </Alert>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
