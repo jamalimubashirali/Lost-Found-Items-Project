@@ -79,7 +79,8 @@ server/               → Express backend
 
 Create `.env` file for frontend and backend from `.sample.env` present in both directories.
 
-```backend_env
+### Backend Env
+```
 MONGODB_URI="mongodb_uri"
 JWT_SECRET_KEY="JWT_secret_key"
 FONTEND_ORIGIN="Frontend_origin"
@@ -92,21 +93,10 @@ ADMIN_EMAIL="admin_email"
 ADMIN_PASSWORD="admin_password"
 ADMIN_ROLE="admin"
 ```
-
-```frontend_env
+### Frontend Env
+```
 VITE_BACKEND_URL="backend_url"
 ```
-
----
-
-## 📸 Screenshots
-
-> Add screenshots/gifs here of:
-
-* Homepage
-* Item Reporting Form
-* Admin Panel
-* Search/Smart Match Results
 
 ---
 
@@ -133,9 +123,9 @@ VITE_BACKEND_URL="backend_url"
 
 For questions, feedback, or contributions:
 
-* Email: [your.email@example.com](mailto:your.email@example.com)
-* LinkedIn: [Your Name](https://linkedin.com/in/yourname)
-* GitHub: [@yourusername](https://github.com/yourusername)
+* Email: [jamalimubashirali@gmail.com](mailto:jamalimubashirali@gmail.com)
+* LinkedIn: [Mubashir Ali](https://linkedin.com/in/mubashiralijamali)
+* GitHub: [@jamalimubashirali](https://github.com/jamalimubashirali)
 
 ---
 
